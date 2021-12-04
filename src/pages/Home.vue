@@ -1,29 +1,31 @@
 <template>
-  <div class="class">
-    <h2>Social</h2>
-    <div class="row">
-      <div class="col s12 m6">
-        <div class="card blue-grey darken-1">
-          <div class="card-content white-text">
-            <span class="card-title">Card Title</span>
-            <p>
-              I am a very simple card. I am good at containing small bits of
-              information. I am convenient because I require little markup to
-              use effectively.
-            </p>
-          </div>
-          <div class="card-action">
-            <a href="#">This is a link</a>
-            <a href="#">This is a link</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <span>
+    <PublicarConteudo />
+    <CardConteudo
+      foto="https://materializecss.com/images/yuna.jpg"
+      nome="Erika Denck"
+      data="13/05/2021 12:25"
+    >
+      <CardDetalhe
+        imagem="https://materializecss.com/images/sample-1.jpg"
+        titulo="teste"
+        txt="I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively."
+      />
+    </CardConteudo>
+  </span>
 </template>
 <script>
+import CardConteudo from "@/components/social/CardConteudo";
+import CardDetalhe from "@/components/social/CardDetalhe";
+import PublicarConteudo from "@/components/social/PublicarConteudo";
+
 export default {
   name: "Home",
+  components: {
+    CardConteudo,
+    CardDetalhe,
+    PublicarConteudo,
+  },
   data() {
     return {};
   },
