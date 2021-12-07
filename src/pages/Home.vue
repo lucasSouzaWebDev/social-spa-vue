@@ -39,6 +39,7 @@ import Site from "@/templates/Site";
 import CardConteudo from "@/components/social/CardConteudo";
 import CardDetalhe from "@/components/social/CardDetalhe";
 import PublicarConteudo from "@/components/social/PublicarConteudo";
+import Grid from "@/components/layout/Grid";
 
 export default {
   name: "Home",
@@ -47,6 +48,7 @@ export default {
     CardConteudo,
     CardDetalhe,
     PublicarConteudo,
+    Grid
   },
   data() {
     return {};
