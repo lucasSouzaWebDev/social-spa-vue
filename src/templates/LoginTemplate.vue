@@ -3,8 +3,10 @@
     <header>
       <NavBar cor="blue" logo="Social" url="/">
         <li><router-link to="/">Home</router-link></li>
-        <li><router-link to="/login">Entrar</router-link></li>
-        <li><router-link to="/cadastro">Cadastre-se</router-link></li>
+        <li v-if="!usuario"><router-link to="/login">Entrar</router-link></li>
+        <li v-if="!usuario"><router-link to="/cadastro">Cadastre-se</router-link></li>
+        <li v-if="usuario"><router-link to="/perfil">{{usuario.name}}</router-link></li>
+        <li v-if="usuario"><a @click="sair()">Sair</a></li>
       </Navbar>
     </header>
     <main>
@@ -38,12 +40,30 @@ import CardMenu from "@/components/layout/CardMenu";
 
 export default {
   name: "LoginTemplate",
+  data(){
+    return {
+      usuario: false
+    }
+  },
   components: {
     NavBar,
     Footer,
     Grid,
     CardMenu,
   },
+  created(){
+    let usuario = sessionStorage.getItem("usuario");
+    if(usuario){
+      this.usuario = JSON.parse(usuario);
+      this.$router.push('/');
+    }
+  },
+  methods: {
+    sair() {
+      sessionStorage.clear();
+      this.usuario = false;
+    }
+  }
 };
 </script>
 

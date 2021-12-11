@@ -43,11 +43,26 @@ export default {
           email: this.usuario.email,
           password: this.usuario.password
         })
-        .then(function (response) {
+        .then(response => {
           console.log(response);
+          if(response.data.token){
+            sessionStorage.setItem('usuario', JSON.stringify(response.data));
+            this.$router.push('/');
+          }else if(response.data.status == false){
+            // login não existe
+            alert('Login inválido!');
+          }else{
+            // erros de validação
+            let erros = '';
+            for(let erro of Object.values(response.data)){
+              erros += erro + " ";
+            }
+            alert(erros);
+          }
         })
-        .catch(function (error) {
+        .catch(error => {
           console.log(error);
+          alert("Erro: tente novamente mais tarde");
         });
     },
   },
