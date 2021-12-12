@@ -10,11 +10,11 @@
       <span>
         <h2>Cadastro</h2>
 
-        <input type="text" placeholder="Nome" value="" />
-        <input type="text" placeholder="E-mail" value="" />
-        <input type="password" placeholder="Senha" value="" />
-        <input type="password" placeholder="Confirme sua Senha" value="" />
-        <button class="blue btn waves-effect waves-light">
+        <input type="text" placeholder="Nome" v-model="name" />
+        <input type="text" placeholder="E-mail" v-model="email" />
+        <input type="password" placeholder="Senha" v-model="password" />
+        <input type="password" placeholder="Confirme sua Senha" v-model="password_confirmation" />
+        <button class="blue btn waves-effect waves-light" @click="cadastro()">
           Cadastrar
         </button>
       </span>
@@ -23,6 +23,7 @@
 </template>
 <script>
 import LoginTemplate from "@/templates/LoginTemplate";
+import axios from "axios";
 
 export default {
   name: "Cadastro",
@@ -31,8 +32,42 @@ export default {
   },
   data() {
     return {
-      
+      name: "",
+      email: "",
+      password: "",
+      password_confirmation: "",
     };
+  },
+  methods: {
+    cadastro() {
+      axios
+        .post(`http://127.0.0.1:8000/api/cadastro`, {
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          password_confirmation: this.password_confirmation
+        })
+        .then(response => {
+          console.log(response);
+          if(response.data.token){
+            sessionStorage.setItem('usuario', JSON.stringify(response.data));
+            this.$router.push('/');
+          }else if(response.data.status == false){
+            alert('Erro no cadastro!');
+          }else{
+            // erros de validação
+            let erros = '';
+            for(let erro of Object.values(response.data)){
+              erros += erro + " ";
+            }
+            alert(erros);
+          }
+        })
+        .catch(error => {
+          console.log(error);
+          alert("Erro: tente novamente mais tarde");
+        });
+    },
   },
 };
 </script>
