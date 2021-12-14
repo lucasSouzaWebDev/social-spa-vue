@@ -4,15 +4,15 @@
       <div class="row valign-wrapper">
         <Grid tamanho="4">
           <img
-            src="https://materializecss.com/images/yuna.jpg"
-            alt=""
+            :src="usuario.imagem"
+            :alt="'perfil ' + usuario.name"
             class="circle responsive-img"
           />
           <!-- notice the "circle" class -->
         </Grid>
         <Grid tamanho="8">
           <span class="black-text">
-            <h5>Erika</h5>
+            <h5>{{usuario.name}}</h5>
             Add the "circle" class to it to make it appear circular.
           </span>
         </Grid>
@@ -52,6 +52,16 @@ export default {
   },
   data() {
     return {};
+  },
+  created(){
+    let usuario = sessionStorage.getItem("usuario");
+    if(usuario){
+      this.usuario = JSON.parse(usuario);
+      this.name = this.usuario.name;
+      this.email = this.usuario.email;
+    }else{
+      this.$router.push('/login');
+    }
   },
 };
 </script>
