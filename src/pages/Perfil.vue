@@ -2,7 +2,7 @@
   <Site>
     <span slot="menu-lateral">
       <img
-        src="https://etus.com.br/blog/wp-content/uploads/2021/04/etus-evolucao-redes-sociais-scaled.jpg"
+        :src="usuario.imagem"
         class="responsive-img"
       />
     </span>
@@ -15,7 +15,7 @@
         <div class="file-field input-field">
           <div class="btn">
             <span>File</span>
-            <input type="file" />
+            <input type="file" @change="uploadImagem" />
           </div>
           <div class="file-path-wrapper">
             <input class="file-path validate" type="text" />
@@ -46,6 +46,7 @@ export default {
       email: "",
       password: "",
       password_confirmation: "",
+      imagem: "",
     };
   },
   created(){
@@ -59,26 +60,41 @@ export default {
     }
   },
   methods: {
+    uploadImagem(e) {
+      let file = e.target.files || e.dataTransfer.files;
+      if(!file.length){
+        return;
+      }
+
+      let reader = new FileReader();
+      reader.onload = (e) => {
+        this.imagem = e.target.result;
+      };
+
+      reader.readAsDataURL(file[0]);
+      console.log(this.imagem);
+    },
     perfil() {
       axios
         .put(`http://127.0.0.1:8000/api/perfil`, {
           name: this.name,
           email: this.email,
+          imagem: this.imagem,
           password: this.password,
           password_confirmation: this.password_confirmation,
         }, {"headers": {"authorization": `Bearer ${this.usuario.token}`}})
         .then((response) => {
           if(response.data.token){
-            console.log(response.data);
+            this.usuario = response.data;
             sessionStorage.setItem('usuario', JSON.stringify(response.data));
             alert('Perfil atualizado.');
           }else{
-            console.log('erros de validação');
+            //console.log('erros de validação');
             let erros = '';
             for(let erro of Object.values(response.data)){
               erros += erro + "";
             }
-            alert(erros);
+            //alert(erros);
           }
           
         })
