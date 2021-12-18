@@ -32,7 +32,6 @@
 </template>
 <script>
 import Site from "@/templates/Site";
-import axios from "axios";
 
 export default {
   name: "Perfil",
@@ -75,8 +74,8 @@ export default {
       console.log(this.imagem);
     },
     perfil() {
-      axios
-        .put(`http://127.0.0.1:8000/api/perfil`, {
+      this.$http
+        .put(`${this.$urlAPI}perfil`, {
           name: this.name,
           email: this.email,
           imagem: this.imagem,
