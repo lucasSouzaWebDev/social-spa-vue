@@ -83,17 +83,17 @@ export default {
           password_confirmation: this.password_confirmation,
         }, {"headers": {"authorization": `Bearer ${this.usuario.token}`}})
         .then((response) => {
-          if(response.data.token){
-            this.usuario = response.data;
+          if(response.data.status){
+            this.usuario = response.data.usuario;
             sessionStorage.setItem('usuario', JSON.stringify(response.data));
             alert('Perfil atualizado.');
-          }else{
+          }else if(response.data.status == false && response.data.validacao){
             //console.log('erros de validação');
             let erros = '';
-            for(let erro of Object.values(response.data)){
+            for(let erro of Object.values(response.data.erros)){
               erros += erro + "";
             }
-            //alert(erros);
+            alert(erros);
           }
           
         })

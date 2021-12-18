@@ -47,19 +47,18 @@ export default {
           password_confirmation: this.password_confirmation
         })
         .then(response => {
-          console.log(response);
-          if(response.data.token){
-            sessionStorage.setItem('usuario', JSON.stringify(response.data));
+          if(response.data.status){
+            sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
             this.$router.push('/');
-          }else if(response.data.status == false){
-            alert('Erro no cadastro!');
-          }else{
+          }else if(response.data.status == false && response.data.validacao){
             // erros de validação
             let erros = '';
-            for(let erro of Object.values(response.data)){
+            for(let erro of Object.values(response.data.erros)){
               erros += erro + " ";
             }
             alert(erros);
+          }else{
+            alert('Erro no cadastro!');
           }
         })
         .catch(error => {

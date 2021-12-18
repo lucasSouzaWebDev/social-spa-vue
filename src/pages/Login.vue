@@ -43,20 +43,21 @@ export default {
           password: this.usuario.password
         })
         .then(response => {
-          console.log(response);
-          if(response.data.token){
-            sessionStorage.setItem('usuario', JSON.stringify(response.data));
+          //console.log(response);
+          if(response.data.status){
+            sessionStorage.setItem('usuario', JSON.stringify(response.data.usuario));
             this.$router.push('/');
-          }else if(response.data.status == false){
-            // login não existe
-            alert('Login inválido!');
-          }else{
+          }else if(response.data.status == false && response.data.validacao){
             // erros de validação
             let erros = '';
-            for(let erro of Object.values(response.data)){
+            for(let erro of Object.values(response.data.erros)){
               erros += erro + " ";
             }
             alert(erros);
+            
+          }else{
+            // login não existe
+            alert('Login inválido!');
           }
         })
         .catch(error => {
