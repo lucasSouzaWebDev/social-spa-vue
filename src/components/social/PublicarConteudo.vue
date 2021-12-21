@@ -1,14 +1,16 @@
 <template>
   <div class="row">
     <Grid class="input-field" tamanho="12">
-      <textarea id="conteudo" v-model="conteudo" class="materialize-textarea"></textarea>
       <label for="conteudo">O que está acontecendo?</label>
+      <input type="text" v-model="conteudo.titulo">
+      <textarea v-if="conteudo.titulo" placeholder="Conteúdo" id="conteudo" v-model="conteudo.texto" class="materialize-textarea"></textarea>
+      <input v-if="conteudo.titulo && conteudo.texto" placeholder="Link" type="text" v-model="conteudo.link">
+      <input v-if="conteudo.titulo && conteudo.texto" placeholder="Link da Imagem" type="text" v-model="conteudo.imagem">
     </Grid>
-    <p>
-      <Grid v-if="conteudo"
+    <p class="right">
+      <button @click="addConteudo()" v-if="conteudo.titulo && conteudo.texto"
         class="blue btn waves-effect waves-light col s"
-        tamanho="2 offset-s10"
-        >Publicar</Grid
+        >Publicar</button
       >
     </p>
   </div>
@@ -21,12 +23,32 @@ export default {
   components: {
     Grid,
   },
-  props: [],
+  props: ['usuario'],
   data() {
     return {
-      conteudo: ''
+      conteudo: {titulo: '', texto: '', link: '', imagem: ''}
     };
   },
+  methods: {
+    addConteudo(){
+      console.log(this.conteudo);
+      this.$http.post(`${this.$urlAPI}conteudo/adicionar`, {
+        titulo : this.conteudo.titulo,
+        texto : this.conteudo.texto,
+        link : this.conteudo.link,
+        imagem : this.conteudo.imagem
+      }, 
+      {"headers": {"authorization": `Bearer ${this.usuario.token}`}}).then(response => {
+        if(response.data.status){
+          console.log(response.data.conteudos);
+        }
+
+      }).catch(error => {
+          console.log(error);
+          alert("Erro: tente novamente mais tarde");
+      });
+    }
+  }
 };
 </script>
 <style scoped>

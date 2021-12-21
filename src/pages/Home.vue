@@ -19,7 +19,7 @@
       </div>
     </span>
     <span slot="principal">
-      <PublicarConteudo />
+      <PublicarConteudo :usuario="usuario" />
       <CardConteudo
         foto="https://materializecss.com/images/yuna.jpg"
         nome="Erika Denck"
