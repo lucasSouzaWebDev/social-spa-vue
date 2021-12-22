@@ -56,12 +56,6 @@ export default {
       this.usuario = JSON.parse(usuario);
       this.$router.push('/');
     }
-  },
-  methods: {
-    sair() {
-      sessionStorage.clear();
-      this.usuario = false;
-    }
   }
 };
 </script>

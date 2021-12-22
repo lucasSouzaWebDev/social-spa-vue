@@ -57,15 +57,14 @@ export default {
     CardMenu,
   },
   created(){
-    let usuario = sessionStorage.getItem("usuario");
-    if(usuario){
-      this.usuario = JSON.parse(usuario);
-    }else{
-      this.$router.push('/login');
+    let user = this.$store.getters.getUsuario;
+    if(user){
+      this.usuario = user;
     }
   },
   methods: {
     sair() {
+      this.$store.commit('setUsuario', null);
       sessionStorage.clear();
       this.usuario = false;
       this.$router.push('/login');

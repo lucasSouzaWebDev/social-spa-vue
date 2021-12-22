@@ -51,16 +51,14 @@ export default {
     Grid
   },
   data() {
-    return {};
+    return {
+      usuario: false
+    };
   },
   created(){
     let usuario = sessionStorage.getItem("usuario");
     if(usuario){
       this.usuario = JSON.parse(usuario);
-      this.name = this.usuario.name;
-      this.email = this.usuario.email;
-    }else{
-      this.$router.push('/login');
     }
   },
 };
