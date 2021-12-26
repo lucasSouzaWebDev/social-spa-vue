@@ -20,15 +20,15 @@
     </span>
     <span slot="principal">
       <PublicarConteudo />
-      <CardConteudo
-        foto="https://materializecss.com/images/yuna.jpg"
-        nome="Erika Denck"
-        data="13/05/2021 12:25"
+      <CardConteudo v-for="conteudo in conteudos" :key="conteudo.id"
+        :foto="conteudo.user.imagem"
+        :nome="conteudo.user.name"
+        :data="conteudo.data"
       >
         <CardDetalhe
-          imagem="https://materializecss.com/images/sample-1.jpg"
-          titulo="teste"
-          txt="I am a very simple card. I am good at containing small bits of information. I am convenient because I require little markup to use effectively."
+          :imagem="conteudo.imagem"
+          :titulo="conteudo.titulo"
+          :txt="conteudo.texto"
         />
       </CardConteudo>
     </span>
@@ -52,13 +52,27 @@ export default {
   },
   data() {
     return {
-      usuario: false
+      usuario: false,
+      conteudos: []
     };
   },
   created(){
     let usuario = this.$store.getters.getUsuario;
     if(usuario){
       this.usuario = this.$store.getters.getUsuario;
+      this.$http
+        .get(`${this.$urlAPI}conteudo/lista`, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
+        .then((response) => {
+          console.log(response);
+          if(response.data.status){
+            this.conteudos = response.data.conteudos.data;
+          }
+          
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Erro: tente novamente mais tarde");
+        });
     }
   },
 };
