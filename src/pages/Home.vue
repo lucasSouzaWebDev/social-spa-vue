@@ -20,7 +20,7 @@
     </span>
     <span slot="principal">
       <PublicarConteudo />
-      <CardConteudo v-for="conteudo in conteudos" :key="conteudo.id"
+      <CardConteudo v-for="conteudo in listaConteudos" :key="conteudo.id"
         :foto="conteudo.user.imagem"
         :nome="conteudo.user.name"
         :data="conteudo.data"
@@ -52,8 +52,7 @@ export default {
   },
   data() {
     return {
-      usuario: false,
-      conteudos: []
+      usuario: false
     };
   },
   created(){
@@ -65,7 +64,7 @@ export default {
         .then((response) => {
           console.log(response);
           if(response.data.status){
-            this.conteudos = response.data.conteudos.data;
+            this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
           }
           
         })
@@ -75,6 +74,11 @@ export default {
         });
     }
   },
+  computed: {
+    listaConteudos(){
+      return this.$store.getters.getConteudosLinhaDoTempo;
+    }
+  }
 };
 </script>
 <style scoped>
