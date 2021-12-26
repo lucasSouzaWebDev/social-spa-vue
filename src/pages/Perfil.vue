@@ -49,9 +49,9 @@ export default {
     };
   },
   created(){
-    let usuario = sessionStorage.getItem("usuario");
+    let usuario = this.$store.getters.getUsuario;
     if(usuario){
-      this.usuario = JSON.parse(usuario);
+      this.usuario = this.$store.getters.getUsuario;
       this.name = this.usuario.name;
       this.email = this.usuario.email;
     }else{
@@ -81,10 +81,11 @@ export default {
           imagem: this.imagem,
           password: this.password,
           password_confirmation: this.password_confirmation,
-        }, {"headers": {"authorization": `Bearer ${this.usuario.token}`}})
+        }, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
         .then((response) => {
           if(response.data.status){
             this.usuario = response.data.usuario;
+            this.$store.commit('setUsuario', response.data.usuario);
             sessionStorage.setItem('usuario', JSON.stringify(response.data));
             alert('Perfil atualizado.');
           }else if(response.data.status == false && response.data.validacao){

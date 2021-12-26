@@ -19,7 +19,7 @@
       </div>
     </span>
     <span slot="principal">
-      <PublicarConteudo :usuario="usuario" />
+      <PublicarConteudo />
       <CardConteudo
         foto="https://materializecss.com/images/yuna.jpg"
         nome="Erika Denck"
@@ -56,9 +56,9 @@ export default {
     };
   },
   created(){
-    let usuario = sessionStorage.getItem("usuario");
+    let usuario = this.$store.getters.getUsuario;
     if(usuario){
-      this.usuario = JSON.parse(usuario);
+      this.usuario = this.$store.getters.getUsuario;
     }
   },
 };
