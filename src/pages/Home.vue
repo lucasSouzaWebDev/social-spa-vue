@@ -29,6 +29,7 @@
           :imagem="conteudo.imagem"
           :titulo="conteudo.titulo"
           :txt="conteudo.texto"
+          :link="conteudo.link"
         />
       </CardConteudo>
     </span>

@@ -43,7 +43,14 @@ export default {
           console.log(response.data.conteudos);
           this.conteudo = {titulo: '', texto: '', link: '', imagem: ''};
           this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
-        }
+        }else if(response.data.status == false && response.data.validacao){
+            //console.log('erros de validação');
+            let erros = '';
+            for(let erro of Object.values(response.data.erros)){
+              erros += erro + "";
+            }
+            alert(erros);
+          }
 
       }).catch(error => {
           console.log(error);
