@@ -35,11 +35,11 @@ export default {
   components: {
     Grid,
   },
-  props: ['id', "foto", "nome", "data"],
+  props: ['id', "foto", "nome", "data", 'totalcurtidas', 'curtiuConteudo'],
   data() {
     return {
-      curtiu:'favorite_border',
-      totalCurtidas: 0
+      curtiu: this.curtiuConteudo ? 'favorite' : 'favorite_border',
+      totalCurtidas: this.totalcurtidas
     };
   },
   methods: {
@@ -52,6 +52,8 @@ export default {
       .then((response) => {
         if(response.data.status){
           this.totalCurtidas = response.data.curtidas;
+          this.$store.commit('setConteudosLinhaDoTempo', response.data.lista.conteudos.data);
+          
           if(this.curtiu == 'favorite_border'){
             this.curtiu = 'favorite';
           }else{
