@@ -18,8 +18,9 @@
       </div>
 
       <div class="card-action">
-        <p>
-          <i class="material-icons">favorite_border</i>
+        <p><a style="cursor:pointer;" @click="curtida(id)">
+          <i class="material-icons">{{curtiu}}</i>{{totalCurtidas}}
+        </a>
           <i class="material-icons">insert_comment</i>
         </p>
       </div>
@@ -34,10 +35,40 @@ export default {
   components: {
     Grid,
   },
-  props: ["foto", "nome", "data"],
+  props: ['id', "foto", "nome", "data"],
   data() {
-    return {};
+    return {
+      curtiu:'favorite_border',
+      totalCurtidas: 0
+    };
   },
+  methods: {
+    curtida(id){
+      this.$http.put(
+        `${this.$urlAPI}conteudo/curtir/${id}`, 
+        {}, 
+        {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}}
+      )
+      .then((response) => {
+        if(response.data.status){
+          this.totalCurtidas = response.data.curtidas;
+          if(this.curtiu == 'favorite_border'){
+            this.curtiu = 'favorite';
+          }else{
+            this.curtiu = 'favorite_border';
+          }
+        }else{
+          alert(response.data.erro);
+        }
+        
+          
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Erro: tente novamente mais tarde");
+      });
+    }
+  }
 };
 </script>
 <style scoped>

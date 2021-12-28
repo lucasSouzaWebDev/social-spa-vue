@@ -21,6 +21,7 @@
     <span slot="principal">
       <PublicarConteudo />
       <CardConteudo v-for="conteudo in listaConteudos" :key="conteudo.id"
+        :id="conteudo.id"
         :foto="conteudo.user.imagem"
         :nome="conteudo.user.name"
         :data="conteudo.data"
