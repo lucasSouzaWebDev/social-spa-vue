@@ -21,7 +21,24 @@
         <p><a style="cursor:pointer;" @click="curtida(id)">
           <i class="material-icons">{{curtiu}}</i>{{totalCurtidas}}
         </a>
-          <i class="material-icons">insert_comment</i>
+        <a style="cursor:pointer;" @click="abreComentarios(id)">
+          <i class="material-icons">insert_comment</i>{{comentarios.length}}
+        </a>
+        </p>
+        <p v-if="exibirComentario" class="right-align">
+          <input type="text" placeholder="Comentar...">
+          <button class="orange btn waves-effect waves-light"><i class="material-icons">send</i></button>
+        </p>
+        <p v-if="exibirComentario">
+          <ul class="collection">
+            <li class="collection-item avatar" v-for="comentario in comentarios" :key="comentario.id">
+              <img :src="comentario.user.imagem" :alt="nome" class="circle">
+              <span class="title">{{comentario.user.name}} <small> - {{comentario.data}}</small></span>
+              <p>
+                {{comentario.texto}}
+              </p>
+            </li>
+          </ul>
         </p>
       </div>
     </div>
@@ -35,11 +52,12 @@ export default {
   components: {
     Grid,
   },
-  props: ['id', "foto", "nome", "data", 'totalcurtidas', 'curtiuConteudo'],
+  props: ['id', "foto", "nome", "data", 'totalcurtidas', 'curtiuConteudo', 'comentarios'],
   data() {
     return {
       curtiu: this.curtiuConteudo ? 'favorite' : 'favorite_border',
-      totalCurtidas: this.totalcurtidas
+      totalCurtidas: this.totalcurtidas,
+      exibirComentario:false
     };
   },
   methods: {
@@ -69,6 +87,9 @@ export default {
         console.log(error);
         alert("Erro: tente novamente mais tarde");
       });
+    },
+    abreComentarios(id){
+      this.exibirComentario = !this.exibirComentario;
     }
   }
 };

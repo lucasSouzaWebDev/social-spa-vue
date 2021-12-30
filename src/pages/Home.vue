@@ -23,6 +23,7 @@
       <CardConteudo v-for="conteudo in listaConteudos" :key="conteudo.id"
         :id="conteudo.id"
         :totalcurtidas="conteudo.total_curtidas"
+        :comentarios="conteudo.comentarios"
         :curtiuConteudo="conteudo.curtiu_conteudo"
         :foto="conteudo.user.imagem"
         :nome="conteudo.user.name"
