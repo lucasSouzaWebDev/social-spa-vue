@@ -36,6 +36,7 @@
           :link="conteudo.link"
         />
       </CardConteudo>
+      <button v-if="urlProximaPagina" @click="carregaPaginacao()" class="btn blue">Mais...</button>
     </span>
   </Site>
 </template>
@@ -57,7 +58,8 @@ export default {
   },
   data() {
     return {
-      usuario: false
+      usuario: false,
+      urlProximaPagina: null
     };
   },
   created(){
@@ -70,6 +72,28 @@ export default {
           console.log(response);
           if(response.data.status){
             this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
+            this.urlProximaPagina = response.data.conteudos.next_page_url;
+          }
+          
+        })
+        .catch((error) => {
+          console.log(error);
+          alert("Erro: tente novamente mais tarde");
+        });
+    }
+  },
+  methods: {
+    carregaPaginacao(){
+      if(!this.urlProximaPagina){
+        return;
+      }
+      this.$http
+        .get(this.urlProximaPagina, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
+        .then((response) => {
+          console.log(response);
+          if(response.data.status){
+            this.$store.commit('setPaginacaoConteudosLinhaDoTempo', response.data.conteudos.data);
+            this.urlProximaPagina = response.data.conteudos.next_page_url;
           }
           
         })

@@ -21,13 +21,13 @@
         <p><a style="cursor:pointer;" @click="curtida(id)">
           <i class="material-icons">{{curtiu}}</i>{{totalCurtidas}}
         </a>
-        <a style="cursor:pointer;" @click="abreComentarios(id)">
+        <a style="cursor:pointer;" @click="abreComentarios()">
           <i class="material-icons">insert_comment</i>{{comentarios.length}}
         </a>
         </p>
         <p v-if="exibirComentario" class="right-align">
-          <input type="text" placeholder="Comentar...">
-          <button class="orange btn waves-effect waves-light"><i class="material-icons">send</i></button>
+          <input type="text" v-model="textoComentario" placeholder="Comentar...">
+          <button v-if="textoComentario" @click="comentar(id)" class="orange btn waves-effect waves-light"><i class="material-icons">send</i></button>
         </p>
         <p v-if="exibirComentario">
           <ul class="collection">
@@ -57,7 +57,8 @@ export default {
     return {
       curtiu: this.curtiuConteudo ? 'favorite' : 'favorite_border',
       totalCurtidas: this.totalcurtidas,
-      exibirComentario:false
+      exibirComentario:false,
+      textoComentario: ''
     };
   },
   methods: {
@@ -88,9 +89,37 @@ export default {
         alert("Erro: tente novamente mais tarde");
       });
     },
-    abreComentarios(id){
+    abreComentarios(){
       this.exibirComentario = !this.exibirComentario;
+    },
+    comentar(id){
+      if(!this.textoComentario){
+        return;
+      }
+      this.$http.put(
+        `${this.$urlAPI}conteudo/comentar/${id}`, 
+        {
+          texto: this.textoComentario
+        }, 
+        {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}}
+      )
+      .then((response) => {
+        if(response.data.status){
+          this.textoComentario = '';
+          this.$store.commit('setConteudosLinhaDoTempo', response.data.lista.conteudos.data);
+          
+        }else{
+          alert(response.data.erro);
+        }
+        
+          
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Erro: tente novamente mais tarde");
+      });
     }
+
   }
 };
 </script>
