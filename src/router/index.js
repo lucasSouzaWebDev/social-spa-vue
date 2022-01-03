@@ -4,6 +4,7 @@ import Home from '@/pages/Home'
 import Login from '@/pages/Login'
 import Cadastro from '@/pages/Cadastro'
 import Perfil from '@/pages/Perfil'
+import Pagina from '@/pages/Pagina'
 
 Vue.use(Router)
 
@@ -29,6 +30,11 @@ export default new Router({
       path: '/perfil',
       name: 'Perfil',
       component: Perfil
+    },
+    {
+      path: '/pagina/:id/:nome?',
+      name: 'Pagina',
+      component: Pagina
     },
     
   ]
