@@ -3,16 +3,19 @@
     <span slot="menu-lateral">
       <div class="row valign-wrapper">
         <Grid tamanho="4">
-          <img
-            :src="donoPagina.imagem"
-            :alt="'perfil ' + donoPagina.name"
-            class="circle responsive-img"
-          />
-          <!-- notice the "circle" class -->
+          <router-link :to="`/pagina/${donoPagina.id}`">
+            <img
+              :src="donoPagina.imagem"
+              :alt="'perfil ' + donoPagina.name"
+              class="circle responsive-img"
+            />
+          </router-link>
         </Grid>
         <Grid tamanho="8">
           <span class="black-text">
-            <h5>{{donoPagina.name}}</h5>
+            <router-link :to="`/pagina/${donoPagina.id}`">
+              <h5>{{donoPagina.name}}</h5>
+            </router-link>
             Add the "circle" class to it to make it appear circular.
           </span>
         </Grid>
@@ -25,6 +28,7 @@
         :totalcurtidas="conteudo.total_curtidas"
         :comentarios="conteudo.comentarios"
         :curtiuConteudo="conteudo.curtiu_conteudo"
+        :usuarioid="conteudo.user.id"
         :foto="conteudo.user.imagem"
         :nome="conteudo.user.name"
         :data="conteudo.data"

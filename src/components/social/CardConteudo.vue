@@ -4,12 +4,13 @@
       <div class="card-content">
         <div class="row valign-wrapper">
           <Grid tamanho="1">
-            <img :src="foto" :alt="nome" class="circle responsive-img" />
-            <!-- notice the "circle" class -->
+            <router-link :to="`/pagina/${usuarioid}`">
+              <img :src="foto" :alt="nome" class="circle responsive-img" />
+            </router-link>
           </Grid>
           <Grid tamanho="11">
             <span class="black-text">
-              <strong>{{ nome }}</strong> - <small>{{ data }}</small>
+              <strong><router-link :to="`/pagina/${usuarioid}`">{{ nome }}</router-link></strong> - <small>{{ data }}</small>
             </span>
           </Grid>
         </div>
@@ -52,7 +53,7 @@ export default {
   components: {
     Grid,
   },
-  props: ['id', "foto", "nome", "data", 'totalcurtidas', 'curtiuConteudo', 'comentarios'],
+  props: ['id', "foto", "nome", "data", 'totalcurtidas', 'curtiuConteudo', 'comentarios', 'usuarioid'],
   data() {
     return {
       curtiu: this.curtiuConteudo ? 'favorite' : 'favorite_border',

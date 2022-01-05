@@ -3,16 +3,19 @@
     <span slot="menu-lateral">
       <div class="row valign-wrapper">
         <Grid tamanho="4">
-          <img
-            :src="usuario.imagem"
-            :alt="'perfil ' + usuario.name"
-            class="circle responsive-img"
-          />
-          <!-- notice the "circle" class -->
+          <router-link :to="`/pagina/${usuario.id}/${$slug(usuario.name, {lower: true})}`">
+            <img
+              :src="usuario.imagem"
+              :alt="'perfil ' + usuario.name"
+              class="circle responsive-img"
+            />
+          </router-link>
         </Grid>
         <Grid tamanho="8">
           <span class="black-text">
-            <h5>{{usuario.name}}</h5>
+            <router-link :to="`/pagina/${usuario.id}`">
+              <h5>{{usuario.name}}</h5>
+            </router-link>
             Add the "circle" class to it to make it appear circular.
           </span>
         </Grid>
@@ -25,6 +28,7 @@
         :totalcurtidas="conteudo.total_curtidas"
         :comentarios="conteudo.comentarios"
         :curtiuConteudo="conteudo.curtiu_conteudo"
+        :usuarioid="conteudo.user.id"
         :foto="conteudo.user.imagem"
         :nome="conteudo.user.name"
         :data="conteudo.data"
@@ -60,7 +64,7 @@ export default {
   },
   data() {
     return {
-      usuario: false,
+      usuario: {imagem: '', name: ''},
       urlProximaPagina: null,
       pararScroll: false
     };
