@@ -4,15 +4,15 @@
       <div class="row valign-wrapper">
         <Grid tamanho="4">
           <img
-            :src="usuario.imagem"
-            :alt="'perfil ' + usuario.name"
+            :src="donoPagina.imagem"
+            :alt="'perfil ' + donoPagina.name"
             class="circle responsive-img"
           />
           <!-- notice the "circle" class -->
         </Grid>
         <Grid tamanho="8">
           <span class="black-text">
-            <h5>{{usuario.name}}</h5>
+            <h5>{{donoPagina.name}}</h5>
             Add the "circle" class to it to make it appear circular.
           </span>
         </Grid>
@@ -62,7 +62,8 @@ export default {
     return {
       usuario: false,
       urlProximaPagina: null,
-      pararScroll: false
+      pararScroll: false,
+      donoPagina: {imagem: '', name: ''}
     };
   },
   created(){
@@ -76,6 +77,7 @@ export default {
           if(response.data.status){
             this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
             this.urlProximaPagina = response.data.conteudos.next_page_url;
+            this.donoPagina = response.data.dono;
           }
           
         })
