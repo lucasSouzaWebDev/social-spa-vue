@@ -16,7 +16,7 @@
             <router-link :to="`/pagina/${donoPagina.id}`">
               <h5>{{donoPagina.name}}</h5>
             </router-link>
-            Add the "circle" class to it to make it appear circular.
+            <button @click="amigo(donoPagina.id)" class="btn">Seguir</button>
           </span>
         </Grid>
       </div>
@@ -40,9 +40,7 @@
           :link="conteudo.link"
         />
       </CardConteudo>
-      <div v-scroll="handleScroll">
-
-      </div>
+      <div v-scroll="handleScroll"></div>
     </span>
   </Site>
 </template>
@@ -122,6 +120,9 @@ export default {
         this.pararScroll = true;
         this.carregaPaginacao();
       }
+    },
+    amigo(id){
+      console.log(id);
     }
   },
   computed: {

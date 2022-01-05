@@ -98,7 +98,7 @@ export default {
         .get(this.urlProximaPagina, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
         .then((response) => {
           console.log(response);
-          if(response.data.status){
+          if(response.data.status && this.$route.name == 'Home'){
             this.$store.commit('setPaginacaoConteudosLinhaDoTempo', response.data.conteudos.data);
             this.urlProximaPagina = response.data.conteudos.next_page_url;
             this.pararScroll = false;
