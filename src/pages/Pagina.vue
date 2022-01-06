@@ -3,7 +3,7 @@
     <span slot="menu-lateral">
       <div class="row valign-wrapper">
         <Grid tamanho="4">
-          <router-link :to="`/pagina/${donoPagina.id}`">
+          <router-link :to="`/pagina/${donoPagina.id}/${$slug(donoPagina.name, {lower: true})}`">
             <img
               :src="donoPagina.imagem"
               :alt="'perfil ' + donoPagina.name"
@@ -13,13 +13,20 @@
         </Grid>
         <Grid tamanho="8">
           <span class="black-text">
-            <router-link :to="`/pagina/${donoPagina.id}`">
+          <router-link :to="`/pagina/${donoPagina.id}/${$slug(donoPagina.name, {lower: true})}`">
               <h5>{{donoPagina.name}}</h5>
             </router-link>
-            <button @click="amigo(donoPagina.id)" class="btn">Seguir</button>
+            <button v-if="exibeBtnSeguir" @click="amigo(donoPagina.id)" class="btn">{{textoBtn}}</button>
           </span>
         </Grid>
       </div>
+    </span>
+    <span slot="menu-lateral-amigos">
+      <h3>Seguindo</h3>
+      <router-link v-for="amigo in amigos" :key="amigo.id" :to="`/pagina/${amigo.id}/${$slug(amigo.name, {lower: true})}`">
+        <li>{{amigo.name}}</li>
+      </router-link>
+      <li v-if="!amigos.length">Nenhum</li>
     </span>
     <span slot="principal">
       <PublicarConteudo />
@@ -65,31 +72,73 @@ export default {
       usuario: false,
       urlProximaPagina: null,
       pararScroll: false,
-      donoPagina: {imagem: '', name: ''}
+      donoPagina: {imagem: '', name: ''},
+      exibeBtnSeguir: false,
+      amigos: [],
+      amigosLogado: [],
+      textoBtn: 'Seguir'
     };
   },
   created(){
-    let usuario = this.$store.getters.getUsuario;
-    if(usuario){
-      this.usuario = this.$store.getters.getUsuario;
-      this.$http
-        .get(`${this.$urlAPI}conteudo/pagina/lista/${this.$route.params.id}`, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
-        .then((response) => {
-          console.log(response);
-          if(response.data.status){
-            this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
-            this.urlProximaPagina = response.data.conteudos.next_page_url;
-            this.donoPagina = response.data.dono;
-          }
-          
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("Erro: tente novamente mais tarde");
-        });
-    }
+    this.atualizarPagina();
+  },
+  watch:{
+    '$route': 'atualizarPagina'
   },
   methods: {
+    atualizarPagina(){
+      let usuario = this.$store.getters.getUsuario;
+      if(usuario){
+        this.usuario = this.$store.getters.getUsuario;
+        this.$http
+          .get(`${this.$urlAPI}conteudo/pagina/lista/${this.$route.params.id}`, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
+          .then((response) => {
+            console.log(response);
+            if(response.data.status){
+              this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
+              this.urlProximaPagina = response.data.conteudos.next_page_url;
+              this.donoPagina = response.data.dono;
+              if(this.donoPagina.id != this.usuario.id){
+                this.exibeBtnSeguir = true;
+              }else{
+                this.exibeBtnSeguir = false;
+              }
+
+              this.$http
+              .get(`${this.$urlAPI}usuario/listaamigospagina/${this.donoPagina.id}`, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
+              .then((response) => {
+                console.log(response);
+                if(response.data.status){
+                  this.amigos = response.data.amigos;
+                  this.amigosLogado = response.data.amigoslogado;
+                  this.eAmigo();
+                }else{
+                  alert(response.data.erro);
+                }
+                
+              })
+              .catch((error) => {
+                console.log(error);
+                alert("Erro: tente novamente mais tarde");
+              });
+            }
+            
+          })
+          .catch((error) => {
+            console.log(error);
+            alert("Erro: tente novamente mais tarde");
+          });
+      }
+    },
+    eAmigo(){
+      for(let amigo of this.amigosLogado){
+        if(amigo.id == this.donoPagina.id){
+          this.textoBtn = 'Deixar de Seguir';
+          return;
+        }
+      }
+      this.textoBtn = 'Seguir';
+    },
     carregaPaginacao(){
       if(!this.urlProximaPagina){
         return;
@@ -123,6 +172,27 @@ export default {
     },
     amigo(id){
       console.log(id);
+
+      this.$http.post(
+        `${this.$urlAPI}usuario/amigo`, 
+        {id: id}, 
+        {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}}
+      )
+      .then((response) => {
+        if(response.data.status){
+          console.log(response);
+          this.amigosLogado = response.data.amigos;
+          this.eAmigo();
+        }else{
+          alert(response.data.erro);
+        }
+        
+          
+      })
+      .catch((error) => {
+        console.log(error);
+        alert("Erro: tente novamente mais tarde");
+      });
     }
   },
   computed: {

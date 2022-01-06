@@ -65,9 +65,15 @@ export default {
   },
   methods: {
     curtida(id){
+      let url = '';
+      if(this.$route.name == 'Home'){
+        url = 'conteudo/curtir/';
+      }else{
+        url = 'conteudo/curtirpagina/'
+      }
       this.$http.put(
-        `${this.$urlAPI}conteudo/curtir/${id}`, 
-        {}, 
+        this.$urlAPI + url + id, 
+        {},
         {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}}
       )
       .then((response) => {
@@ -98,8 +104,15 @@ export default {
       if(!this.textoComentario){
         return;
       }
+
+      let url = '';
+      if(this.$route.name == 'Home'){
+        url = 'conteudo/comentar/';
+      }else{
+        url = 'conteudo/comentarpagina/'
+      }
       this.$http.put(
-        `${this.$urlAPI}conteudo/comentar/${id}`, 
+        this.$urlAPI + url + id,
         {
           texto: this.textoComentario
         }, 

@@ -21,6 +21,13 @@
         </Grid>
       </div>
     </span>
+    <span slot="menu-lateral-amigos">
+      <h3>Seguindo</h3>
+      <router-link v-for="amigo in amigos" :key="amigo.id" :to="`/pagina/${amigo.id}/${$slug(amigo.name, {lower: true})}`">
+        <li>{{amigo.name}}</li>
+      </router-link>
+      <li v-if="!amigos.length">Nenhum</li>
+    </span>
     <span slot="principal">
       <PublicarConteudo />
       <CardConteudo v-for="conteudo in listaConteudos" :key="conteudo.id"
@@ -66,7 +73,8 @@ export default {
     return {
       usuario: {imagem: '', name: ''},
       urlProximaPagina: null,
-      pararScroll: false
+      pararScroll: false,
+      amigos: []
     };
   },
   created(){
@@ -80,6 +88,22 @@ export default {
           if(response.data.status){
             this.$store.commit('setConteudosLinhaDoTempo', response.data.conteudos.data);
             this.urlProximaPagina = response.data.conteudos.next_page_url;
+
+            this.$http
+            .get(`${this.$urlAPI}usuario/listaamigos`, {"headers": {"authorization": `Bearer ${this.$store.getters.getToken}`}})
+            .then((response) => {
+              console.log(response);
+              if(response.data.status){
+                this.amigos = response.data.amigos;
+              }else{
+                alert(response.data.erro);
+              }
+              
+            })
+            .catch((error) => {
+              console.log(error);
+              alert("Erro: tente novamente mais tarde");
+            });
           }
           
         })

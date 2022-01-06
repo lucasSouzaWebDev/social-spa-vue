@@ -16,10 +16,7 @@
               <slot name="menu-lateral" />
             </CardMenu>
             <CardMenu>
-              <h3>Amigos</h3>
-              <li>Lucas</li>
-              <li>Erika</li>
-              <li>Teste</li>
+              <slot name="menu-lateral-amigos" />
             </CardMenu>
           </Grid>
           <Grid tamanho="8">
