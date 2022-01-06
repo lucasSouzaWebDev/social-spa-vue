@@ -22,11 +22,17 @@
       </div>
     </span>
     <span slot="menu-lateral-amigos">
-      <h3>Seguindo</h3>
+      <h3>Seguindo:</h3>
       <router-link v-for="amigo in amigos" :key="amigo.id" :to="`/pagina/${amigo.id}/${$slug(amigo.name, {lower: true})}`">
         <li>{{amigo.name}}</li>
       </router-link>
       <li v-if="!amigos.length">Nenhum</li>
+
+      <h3>Seguidores:</h3>
+      <router-link v-for="seguidor in seguidores" :key="seguidor.id" :to="`/pagina/${seguidor.id}/${$slug(seguidor.name, {lower: true})}`">
+        <li>{{seguidor.name}}</li>
+      </router-link>
+      <li v-if="!seguidores.length">Nenhum</li>
     </span>
     <span slot="principal">
       <PublicarConteudo />
@@ -75,6 +81,7 @@ export default {
       donoPagina: {imagem: '', name: ''},
       exibeBtnSeguir: false,
       amigos: [],
+      seguidores: [],
       amigosLogado: [],
       textoBtn: 'Seguir'
     };
@@ -112,6 +119,7 @@ export default {
                   this.amigos = response.data.amigos;
                   this.amigosLogado = response.data.amigoslogado;
                   this.eAmigo();
+                  this.seguidores = response.data.seguidores;
                 }else{
                   alert(response.data.erro);
                 }
@@ -182,6 +190,7 @@ export default {
         if(response.data.status){
           console.log(response);
           this.amigosLogado = response.data.amigos;
+          this.seguidores = response.data.seguidores;
           this.eAmigo();
         }else{
           alert(response.data.erro);
