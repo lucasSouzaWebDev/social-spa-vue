@@ -54,7 +54,7 @@ export default {
           }else if(response.data.status == false && response.data.validacao){
             // erros de validação
             let erros = '';
-            for(let erro of Object.values(response.data.erros)){
+            for(let erro of Object.values(response.data.errors)){
               erros += erro + " ";
             }
             alert(erros);
